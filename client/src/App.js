@@ -21,10 +21,18 @@ const App = () => {
     setSavedList([...savedList, movie]);
   };
 
+  const updateMovies = newMovie => {
+    const newMovies = movies.map(movie => (movie.id === newMovie.id && newMovie) || movie);
+    setMovies(newMovies);
+  };
+
   return (
     <>
       <SavedList list={savedList} />
-      <Route exact path="/" component={MovieList} />
+      <Route exact path="/" render={props => {
+          return <MovieList {...props} movies={movies} />;
+        }}
+      />
       <Route
         path="/movies/:id"
         render={props => {
@@ -34,7 +42,7 @@ const App = () => {
       <Route
         path="/update-movie/:id"
         render={props => {
-          return <UpdateMovie {...props} movies={movies} />;
+          return <UpdateMovie {...props} movies={movies} updateMovies={updateMovies} />;
         }}
       />
     </>
