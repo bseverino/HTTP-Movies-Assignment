@@ -11,7 +11,7 @@ const initialMovie = {
 
 const UpdateMovie = props => {
     const [movie, setMovie] = useState(initialMovie);
-    console.log("movie", movie)
+    console.log(movie)
 
     useEffect(() => {
         const movieToEdit = props.movies.find(
@@ -23,18 +23,20 @@ const UpdateMovie = props => {
     }, [props.movies, props.match.params.id]);
 
     const handleChange = e => {
+        setMovie({
+            ...movie,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleStars = (e, i) => {
         e.preventDefault();
-        if (e.target.name === "stars") {
-            setMovie({
-                ...movie,
-                stars: e.target.value.split(",")
-            });
-        } else {
-            setMovie({
-                ...movie,
-                [e.target.name]: e.target.value
-            });
-        }
+        const newStars = [...movie.stars];
+        newStars[i] = e.target.value;
+        setMovie({
+            ...movie,
+            stars: newStars
+        });
     };
 
     const deleteField = e => {
@@ -87,15 +89,21 @@ const UpdateMovie = props => {
                         value={movie.metascore}
                     />
                 </label><br />
-                <label>Stars (separate by commas):<br />
-                    <textarea
-                        type="text"
-                        name="stars"
-                        onChange={handleChange}
-                        placeholder="Stars"
-                        value={movie.stars}
-                    />
-                </label><br />
+                <label id="stars">Stars:<br />
+                {movie.stars && movie.stars.map((star, i) => {
+                    console.log(star, i);
+                        return (
+                            <input
+                                key={i}
+                                type="text"
+                                name='stars'
+                                onChange={e => handleStars(e, i)}
+                                placeholder="Star"
+                                value={movie.stars[i]}
+                            />
+                        )
+                    })}
+                </label>
                 <button onClick={addField}>Add Star</button><br />
                 <button>Submit</button>
             </form>
