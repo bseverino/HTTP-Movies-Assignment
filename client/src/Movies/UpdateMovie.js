@@ -11,6 +11,23 @@ const initialMovie = {
 
 const UpdateMovie = props => {
     const [movie, setMovie] = useState(initialMovie);
+    console.log(movie);
+
+    const fetchMovie = id => {
+        axios
+          .get(`http://localhost:5000/api/movies/${id}`)
+          .then(res => setMovie(res.data ))
+          .catch(err => console.log(err.response));
+    };
+
+    useEffect(() => {
+        const movieToEdit = props.movies.find(
+            movie => `${movie.id}` === props.match.params.id
+        );
+        if (movieToEdit) {
+            fetchMovie(movieToEdit);
+        }
+    }, [props.movies, fetchMovie, props.match.params.id]);
 
     const handleChange = e => {
         setMovie({
@@ -44,6 +61,15 @@ const UpdateMovie = props => {
                     placeholder="Metascore"
                     value={movie.metascore}
                 />
+                {movie.stars && movie.stars.map(star => (
+                    <input
+                        key="star"
+                        type="text"
+                        name="star"
+                        placeholder="Star"
+                        value={star}
+                    />
+                ))}
             </form>
         </div>
     );
