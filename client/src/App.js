@@ -4,6 +4,7 @@ import { Route } from "react-router-dom";
 import SavedList from "./Movies/SavedList";
 import MovieList from "./Movies/MovieList";
 import Movie from "./Movies/Movie";
+import AddMovie from "./Movies/AddMovie";
 import UpdateMovie from "./Movies/UpdateMovie";
 
 const App = () => {
@@ -19,6 +20,10 @@ const App = () => {
 
   const addToSavedList = movie => {
     setSavedList([...savedList, movie]);
+  };
+
+  const addedMovie = newMovies => {
+    setMovies(newMovies);
   };
 
   const updateMovies = newMovie => {
@@ -42,6 +47,12 @@ const App = () => {
         path="/movies/:id"
         render={props => {
           return <Movie {...props} movies={movies} addToSavedList={addToSavedList} deletedMovie={deletedMovie} />;
+        }}
+      />
+      <Route
+        path="/add-movie"
+        render={props => {
+          return <AddMovie {...props} addedMovie={addedMovie} />
         }}
       />
       <Route
